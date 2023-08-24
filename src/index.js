@@ -7,6 +7,7 @@ let userRequest = 'q=';
 const imageType = 'image_type=photo';
 const orientation = 'orientation=horizontal';
 const safeSearch = 'safesearch=true';
+const perPage = 'per_page=200'
 
 const form = document.getElementById('search-form');
 const button = document.querySelector('.button');
@@ -14,11 +15,31 @@ const gallery = document.getElementById('gallery');
 
 const fetchImages = async () => {
   return await axios.get(
-    `${api}?${apiKey}&${apiKey}&${userRequest}&${imageType}&${orientation}&${safeSearch}`
+    `${api}?${apiKey}&${apiKey}&${userRequest}&${imageType}&${orientation}&${safeSearch}&${perPage}`
   );
 };
 
-// const templateCard
+const templateCards = (items) => {
+  items.forEach(item => {
+    gallery.innerHTML += `<div class="photo-card">
+    <img src="" alt="" loading="lazy" />
+    <div class="info">
+      <p class="info-item">
+        <b>Likes</b>
+      </p>
+      <p class="info-item">
+        <b>Views</b>
+      </p>
+      <p class="info-item">
+        <b>Comments</b>
+      </p>
+      <p class="info-item">
+        <b>Downloads</b>
+      </p>
+    </div>
+  </div>`
+  })
+}
 
 form.addEventListener('submit', async e => {
   e.preventDefault();
@@ -28,8 +49,8 @@ form.addEventListener('submit', async e => {
   userRequest += searchQuery.value;
   const response = await fetchImages();
   if (response.data.total === 0)
-    Notify.failure(
+    return Notify.failure(
       `Sorry, there are no images matching your search query. Please try again.`
     );
-  else console.log(response);
+  console.log(response)
 });
