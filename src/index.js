@@ -3,13 +3,13 @@ import SimpleLightbox from 'simplelightbox';
 import { fetchImages } from './js/fetchImages';
 import { templateCards } from './js/templateCards';
 
-const body = document.getElementsByTagName('body')[0];
 const form = document.getElementById('search-form');
 const loadMore = document.querySelector('.load-more');
 const gallery = document.getElementById('gallery');
 
 let page = 1;
 const perPage = 40;
+let userRequest = '';
 
 form.addEventListener('submit', async e => {
   e.preventDefault();
@@ -22,7 +22,7 @@ form.addEventListener('submit', async e => {
   userRequest = '';
   gallery.innerHTML = '';
   userRequest = searchQuery.value;
-  const response = await fetchImages(page, perPage);
+  const response = await fetchImages(page, perPage, userRequest);
   if (response.data.totalHits === 0)
     return Notify.failure(
       `Sorry, there are no images matching your search query. Please try again.`
@@ -35,7 +35,7 @@ form.addEventListener('submit', async e => {
 
 loadMore.addEventListener('click', async () => {
   page++;
-  const response = await fetchImages(page, perPage);
+  const response = await fetchImages(page, perPage, userRequest);
   templateCards(response.data.hits, gallery);
   const { height: cardHeight } = document
     .querySelector('#gallery')
