@@ -6,10 +6,8 @@ let userRequest = '';
 const imageType = 'photo';
 const orientation = 'horizontal';
 const safeSearch = 'true';
-const perPage = 40;
-let page = 1;
 
-export const fetchImages = async () => {
+export const fetchImages = async (page, perPage) => {
   return await axios.get(
     `${api}?key=${apiKey}&q=${userRequest}&image_type=${imageType}&orientation=${orientation}&safesearch=${safeSearch}&per_page=${perPage}&page=${page}`
   );

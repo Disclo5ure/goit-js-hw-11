@@ -8,6 +8,9 @@ const form = document.getElementById('search-form');
 const loadMore = document.querySelector('.load-more');
 const gallery = document.getElementById('gallery');
 
+let page = 1;
+const perPage = 40;
+
 form.addEventListener('submit', async e => {
   e.preventDefault();
   const {
@@ -19,7 +22,7 @@ form.addEventListener('submit', async e => {
   userRequest = '';
   gallery.innerHTML = '';
   userRequest = searchQuery.value;
-  const response = await fetchImages();
+  const response = await fetchImages(page, perPage);
   if (response.data.totalHits === 0)
     return Notify.failure(
       `Sorry, there are no images matching your search query. Please try again.`
@@ -32,7 +35,7 @@ form.addEventListener('submit', async e => {
 
 loadMore.addEventListener('click', async () => {
   page++;
-  const response = await fetchImages();
+  const response = await fetchImages(page, perPage);
   templateCards(response.data.hits, gallery);
   const { height: cardHeight } = document
     .querySelector('#gallery')
